@@ -3,4 +3,5 @@
 Route::get('/', 'HomeController@getIndex');
 Route::get('/search', 'HomeController@getSearch');
 Route::get('/users', 'UsersController@getIndex');
-Route::get('/forum', 'PostsController@getIndex');
+Route::get('/forum', 'ForumController@getCategoryIndex');
+Route::get('/forum/{id}', 'ForumController@getPostIndex');

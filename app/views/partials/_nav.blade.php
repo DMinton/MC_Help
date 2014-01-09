@@ -20,7 +20,7 @@
       @endif
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li>{{ link_to_action('PostsController@getIndex', 'Forum') }}</li>
+      <li>{{ link_to_action('ForumController@getCategoryIndex', 'Forum') }}</li>
       <li>{{ link_to_action('UsersController@getIndex', 'User Database') }}</li>
       <li>{{ link_to_action('HomeController@getSearch', 'Search') }}</li>
     </ul>
