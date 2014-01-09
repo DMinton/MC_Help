@@ -7,6 +7,7 @@ class HomeController extends BaseController {
 	}
 
 	public function getSearch(){
+		
 		return View::make('home.search');
 	}
 

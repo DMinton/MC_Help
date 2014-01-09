@@ -12,10 +12,17 @@
 
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      @if(Input::get('theme'))
+        <li>{{ link_to(URL::current(), 'Change Theme') }}</li>
+      @else
+        <li>{{ link_to(URL::current() . '?theme=slate', 'Change Theme') }}</li>
+      @endif
+    </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li>{{ link_to_action('ForumController@getIndex', 'Forum', array()) }}</li>
-      <li>{{ link_to_action('UsersController@getIndex', 'User Database', array()) }}</li>
-      <li>{{ link_to_action('HomeController@getSearch', 'Search', array()) }}</li>
+      <li>{{ link_to_action('PostsController@getIndex', 'Forum') }}</li>
+      <li>{{ link_to_action('UsersController@getIndex', 'User Database') }}</li>
+      <li>{{ link_to_action('HomeController@getSearch', 'Search') }}</li>
     </ul>
   </div><!-- /.navbar-collapse -->
 </nav>

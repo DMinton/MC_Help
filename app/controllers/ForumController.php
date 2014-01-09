@@ -1,10 +1,10 @@
 <?php
 
-class ForumController extends BaseController {
+class PostsController extends BaseController {
 
 	public function getIndex()
 	{
-		return View::make('forum.index');
+		return View::make('posts.index');
 	}
 
 }
