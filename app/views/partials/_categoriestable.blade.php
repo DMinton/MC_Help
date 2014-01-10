@@ -16,16 +16,10 @@
 				<small>{{ $cate->description }}</small>
 			</td>
 			<td>
-				@if($cate->post->first())
-					<small>{{ link_to("forum/$cate->title/" . $cate->post->first()->id, $cate->post->first()->title) }}</small></br>
-					{{ 'Created By: ' . $users->find($cate->post->first()->user_id)->name }}
-				@endif
+				
 			</td>
 			<td>
-				@if($cate->post->first())
-					<small>{{ date_format($cate->post->first()->created_at, 'M j, Y') }}</small></br>
-					<small>{{ date_format($cate->post->first()->created_at, 'g:m') }}</small>
-				@endif
+				
 			</td>
 		</tr>
 	@endforeach
