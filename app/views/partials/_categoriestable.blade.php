@@ -16,7 +16,10 @@
 				<small>{{ $cate->description }}</small>
 			</td>
 			<td>
-				
+				@if($cate->post->first())
+					<small>{{ link_to("forum/$cate->title/" . $cate->post->first()->id, $cate->post->first()->title) }}</small></br>
+					{{ 'Created By: ' . $users->find($cate->post->first()->user_id)->name }}
+				@endif
 			</td>
 			<td>
 				@if($cate->post->first())
