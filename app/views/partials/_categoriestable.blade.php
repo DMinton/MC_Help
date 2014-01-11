@@ -23,8 +23,7 @@
 			</td>
 			<td>
 				@if($cate->post->first())
-					<small>{{ date_format($cate->post->first()->created_at, 'M j, Y') }}</small></br>
-					<small>{{ date_format($cate->post->first()->created_at, 'g:m') }}</small>
+					{{ Post::format_time($cate->post->first()->created_at) }}
 				@endif
 			</td>
 		</tr>
