@@ -16,10 +16,10 @@ class CreatePostsTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned();
 			$table->integer('cate_id')->unsigned();
-			$table->integer('parentpost')->default(0)->unsigned();
+			$table->integer('parentpost_id')->default(0)->unsigned();
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('cate_id')->references('id')->on('posts')->onDelete('cascade');
-			$table->foreign('parentpost')->references('id')->on('posts')->onDelete('cascade');
+			$table->foreign('parentpost_id')->references('id')->on('posts')->onDelete('cascade');
 			$table->string('title', 128);
 			$table->text('content');
 			$table->timestamps();

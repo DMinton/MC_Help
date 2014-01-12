@@ -4,7 +4,7 @@ class UsersController extends BaseController {
 
 	public function getIndex()
 	{
-		$users = User::orderBy('name')->get();
+		$users = User::orderBy('username')->get();
 		return View::make('users.index', array('users' => $users));
 	}
 
@@ -13,7 +13,16 @@ class UsersController extends BaseController {
 	}
 
 	public function postUser(){
-		return 'create user';
+
+		$signup = User::create(array(
+					'username' => Input::get('username'),
+					'password' => Hash::make(Input::get('password'))
+				));
+
+		if(Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), true)){
+			return Redirect::intended('/');
+		}
+		return Redirect::to('signup');
 	}
 
 }

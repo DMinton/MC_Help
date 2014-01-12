@@ -2,6 +2,9 @@
 
 class ForumController extends BaseController {
 
+	/*
+	*	Displays all categories
+	*/
 	public function getCategoryIndex(){
 		$categories = Category::orderBy('title')
 					->get();
@@ -10,6 +13,9 @@ class ForumController extends BaseController {
 		return View::make('forum.category.index', array('categories' => $categories, 'users' => $users));
 	}
 
+	/*
+	*	displays all posts under a category
+	*/
 	public function getPostIndex($category){
 
 		$cate = Category::where('title', '=', $category)
@@ -35,6 +41,9 @@ class ForumController extends BaseController {
 		else{ return View::make('home.notfound'); }
 	}
 
+	/*
+	*	displays the parentpost and all children
+	*/
 	public function getPost($cate, $post_id){
 
 
@@ -43,7 +52,7 @@ class ForumController extends BaseController {
 
 		$posts = Post::where('id', '=', $post_id)
 					->where('cate_id', '=', $cate_id->first()->id)
-					->orWhere('parentpost', '=', $post_id)
+					->orWhere('parentpost_id', '=', $post_id)
 					->orderBy('created_at')
 					->get();
 
@@ -51,5 +60,31 @@ class ForumController extends BaseController {
 			return View::make('forum.post.show', array('posts' => $posts));
 		}
 		else{ return View::make('home.notfound'); }
+	}
+
+	/*
+	*	creates a new post
+	*/
+	public function postPost(){
+
+		if (Auth::attempt(array('username' => 'testuser', 'password' => 'test'), true)){
+
+			$cate = Category::find(Input::get('cate_id'));
+			$parentpost = Post::find(Input::get('parentpost_id'));
+
+			$post = new Post(array(
+		        	'content' => Input::get('content'),
+		        	'title' => Input::get('title')
+	        	));
+
+			$post->parentpost()->associate($parentpost);
+			$post->user()->associate(Auth::user());
+			$data = $cate->post()->save($post);
+			Auth::user()->increment('postcount');
+
+			return Redirect::back();
+
+		}
+		return Redirect::back()->withErrors(array('error_message' => 'message'));
 	}
 }

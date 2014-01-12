@@ -14,13 +14,13 @@
 			{{ Form::open(array('class' => "form-horizontal", 'action' => 'UsersController@postUser')) }}
 				<div class="form-group">
 					<div class='col-md-3'>
-					{{ Form::label('username') }}
+						{{ Form::label('username') }}
 					</div>
 					{{ Form::text('username') }}
 				</div>	
 				<div class="form-group">
-				<div class='col-md-3'>
-					{{ Form::label('password') }}
+					<div class='col-md-3'>
+						{{ Form::label('password') }}
 					</div>
 					{{ Form::password('password') }}
 				</div>

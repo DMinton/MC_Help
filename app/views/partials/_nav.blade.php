@@ -1,7 +1,7 @@
-<nav class="navbar navbar-default" role="navigation">
-  <!-- Brand and toggle get grouped for better mobile display -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
@@ -10,19 +10,11 @@
     {{ link_to_action('HomeController@getIndex', 'MC_Help', array(),array('class' => 'navbar-brand')) }}
   </div>
 
-  <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  <div class="collapse navbar-collapse navbar-right" id="navbar-collapse">
     <ul class="nav navbar-nav">
-      @if(Input::get('theme'))
-        <li>{{ link_to(URL::current(), 'Change Theme') }}</li>
-      @else
-        <li>{{ link_to(URL::current() . '?theme=slate', 'Change Theme') }}</li>
-      @endif
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
       <li>{{ link_to_action('ForumController@getCategoryIndex', 'Forum') }}</li>
       <li>{{ link_to_action('UsersController@getIndex', 'User Database') }}</li>
       <li>{{ link_to_action('HomeController@getSearch', 'Search') }}</li>
     </ul>
-  </div><!-- /.navbar-collapse -->
+  </div>
 </nav>

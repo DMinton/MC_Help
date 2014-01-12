@@ -8,7 +8,7 @@
 	</thead>
 	@foreach($users as $user)
 		<tr class="">
-			<td>{{$user->name}}</td>
+			<td>{{$user->username}}</td>
 			<td>{{$user->postcount}}</td>
 			<td>{{date_format($user->created_at, 'M d, Y')}}</td>
 		</tr>

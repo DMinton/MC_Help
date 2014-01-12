@@ -1,3 +1,5 @@
-<div class="navbar navbar-fixed-bottom">
-	<div class="col-md-10 col-md-offset-1 text-right"><em><small>Designed By: David Minton</small></em></div>
+<div class="navbar navbar-default navbar-fixed-bottom">
+	<div class="nav navbar-nav navbar-right">
+		<p class="navbar-text"><small><em>Designed By: David Minton</em></small></p>
+	</div>
 </div>

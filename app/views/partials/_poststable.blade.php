@@ -5,7 +5,7 @@
 				{{ link_to_action('ForumController@getPost', $post->title, array($cate->title ,$post->id)) }}
 			</td>
 			<td>
-				{{ "Created by: " . $post->user->name }}
+				{{ "Created by: " . $post->user->username }}
 			</td>
 			<td>
 				{{ Post::format_time($post->created_at) }}

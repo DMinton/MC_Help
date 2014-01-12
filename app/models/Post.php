@@ -15,10 +15,20 @@ class Post extends Eloquent {
         return $this->belongsTo('User');
     }
 
+    public function parentpost()
+    {
+        return $this->belongsTo('Post');
+    }
+
+    public function hasparentpost()
+    {
+        return $this->hasMany('Post', 'parentpost_id');
+    }
+
     protected function format_time($date){
         $time = date_format($date, 'M j, Y') 
                 . "</br>" 
-                . date_format($date, 'g:m');
+                . date_format($date, 'g:m A');
         return $time;
     }
 

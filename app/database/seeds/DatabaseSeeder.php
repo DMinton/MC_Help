@@ -26,19 +26,19 @@ class DatabaseSeeder extends Seeder {
 	        DB::table('users')->delete();
 
 	        User::create(array(
-	        	'name' => 'David',
+	        	'username' => 'David',
 	        	'password' => 'password',
 	        	));
 	        User::create(array(
-	        	'name' => 'Adam',
+	        	'username' => 'Adam',
 	        	'password' => 'password',
 	        	));
 	        User::create(array(
-	        	'name' => 'Ben',
+	        	'username' => 'Ben',
 	        	'password' => 'password',
 	        	));
 	        User::create(array(
-	        	'name' => 'Joel',
+	        	'username' => 'Joel',
 	        	'password' => 'password'
 	        	));
 	    }
@@ -80,35 +80,35 @@ class DatabaseSeeder extends Seeder {
 	        Post::create(array(
 	        	'content' => 'blah blah blah content 1 blah blah blah',
 	        	'title' => 'title 1',
-	        	'parentpost' => '0',
+	        	'parentpost_id' => '0',
 	        	'cate_id' => '1',
 	        	'user_id' => '1'
 	        	));
 	        Post::create(array(
 	        	'content' => 'blah blah blah content 2 blah blah blah',
 	        	'title' => 'title 2',
-	        	'parentpost' => '0',
+	        	'parentpost_id' => '0',
 	        	'cate_id' => '2',
 	        	'user_id' => '2'
 	        	));
 	        Post::create(array(
 	        	'content' => 'blah blah blah content 3 blah blah blah',
 	        	'title' => 'title 3',
-	        	'parentpost' => '1',
+	        	'parentpost_id' => '1',
 	        	'cate_id' => '1',
 	        	'user_id' => '3'
 	        	));
 	        Post::create(array(
 	        	'content' => 'blah blah blah content 4 blah blah blah',
 	        	'title' => 'title 4',
-	        	'parentpost' => '2',
+	        	'parentpost_id' => '2',
 	        	'cate_id' => '2',
 	        	'user_id' => '4'
 	        	));
 	        Post::create(array(
 	        	'content' => 'blah blah blah content 5 blah blah blah',
 	        	'title' => 'title 5',
-	        	'parentpost' => '2',
+	        	'parentpost_id' => '2',
 	        	'cate_id' => '2',
 	        	'user_id' => '1'
 	        	));
