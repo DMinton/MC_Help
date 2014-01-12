@@ -26,13 +26,13 @@ class ForumController extends BaseController {
 		}
 
 		$posts = Post::where('cate_id', '=', $cate->id)
-					->where('parentpost', '=', 0)
+					->where('parentpost_id', '=', 0)
 					->orderBy('created_at')
 					->get();
 
-		$users = Post::where('parentpost', '>', 0)
+		$users = Post::where('parentpost_id', '>', 0)
 					->orderBy('created_at', 'asc')
-					->distinct('parentpost')
+					->distinct('parentpost_id')
 					->get();
 					
 		if($posts){
