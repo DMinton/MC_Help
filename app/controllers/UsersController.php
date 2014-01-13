@@ -34,10 +34,11 @@ class UsersController extends BaseController {
 						'password' => Hash::make($credentials->password)
 					));
 
-			if(Auth::attempt($credentials, true)){
-				if(Auth::check()) { return Redirect::intended('/'); }
+			if(Auth::attempt($credentials, true) && Auth::check()){
+				return Redirect::intended('/');
 			}
 		}
+		// returns errors due to not validating
 		return Redirect::to('signup')->with('type', 'danger')->withErrors($validator)->withInput();
 	}
 
@@ -60,6 +61,7 @@ class UsersController extends BaseController {
 		if(Auth::attempt($credentials, true)){
 			if(Auth::check()) { return Redirect::intended('/'); }
 		}
+		// returns errors due to invalid login data
 		$message = "Incorrect username or password.";
 		return Redirect::to('login')->withErrors(array('error_message' => $message));
 	}
@@ -69,6 +71,7 @@ class UsersController extends BaseController {
 	*/
 	public function getLogout(){
 		if(!Auth::logout()){ return Redirect::back(); }
+		// returns errors due to logout
 		$message = 'There was an error logging you out. Please try again.';
 		return Redirect::back()->withErrors(array('error_message' => $message));
 	}

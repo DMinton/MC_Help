@@ -6,13 +6,17 @@ class ForumController extends BaseController {
 	*	Displays all categories
 	*/
 	public function getCategoryIndex(){
+
+		// gets all categories and orders by name
 		$categories = Category::with('post')
 					->orderBy('title')
 					->get();
 
+		// gets all parent posts
 		$parents = Post::where('parentpost_id', '=', 0)
 					->get();
 
+		// gets all users with a postcount
 		$users = User::where('postcount', '>', 0)
 					->get();
 
@@ -24,13 +28,17 @@ class ForumController extends BaseController {
 	*/
 	public function getPostIndex($category){
 
+		// gets category data
 		$cate = Category::where('title', '=', $category)
 					->first();
 
+		// if category not found, return error page
 		if(is_null($cate)){
 			return View::make('home.notfound');
 		}
 
+		// gets all posts in category that is not a parent post
+		// groups them and orders by created at
 		$posts = Post::with('user', 'getPosts')
 					->where('category_id', '=', $cate->id)
 					->where('parentpost_id', '!=', 0)
@@ -38,15 +46,19 @@ class ForumController extends BaseController {
 					->groupBy('parentpost_id')
 					->get();
 
+		// gets all parent posts in category
+		// ordered by created at
 		$parentposts = Post::with('user', 'getPosts')
 					->where('category_id', '=', $cate->id)
 					->where('parentpost_id', '=', 0)
 					->orderBy('created_at', 'desc')
 					->get();
 
+		// gets all users with a post count
 		$users = User::where('postcount', '>', 0)
 					->get();
 					
+		// checks if posts are found, returns error if not found
 		if(!is_null($posts)){
 			return View::make('forum.post.index', array(
 													'posts' => $posts,
@@ -63,18 +75,22 @@ class ForumController extends BaseController {
 	*/
 	public function getPost($cate, $post_id){
 
+		// try is used in case user inputs incorrect url data
 		try{
 			// gets parentpost if postid is not parents
+			// redirects if post is a child
 			$primarypost = Post::find($post_id);
 			if($primarypost->parentpost_id != 0){
 				$post_id = Post::find($primarypost->parentpost_id)->id;
 				return Redirect::action('ForumController@getPost', array('cate' => $cate, 'id' => $post_id));
 			}
 
-
+			// gets category data
 			$cate_id = Category::where('title', '=', $cate)
 						->get();
 
+			// gets all posts with a specific parent and
+			// in category
 			$posts = Post::with('user')
 						->where('id', '=', $post_id)
 						->where('category_id', '=', $cate_id->first()->id)
@@ -82,6 +98,7 @@ class ForumController extends BaseController {
 						->orderBy('created_at')
 						->get();
 
+			// checks category id data
 			if($posts->first()->category_id == $primarypost->category_id){
 				return View::make('forum.post.show', array('posts' => $posts));
 			}
@@ -97,9 +114,9 @@ class ForumController extends BaseController {
 
 		$content = Input::get('content');
 
+		// auth user and checks if content field is valid
 		if ($content && Auth::check()){
 
-			dd($content);
 			$cate = Category::find(Input::get('category_id'));
 			$parentpost = Post::find(Input::get('parentpost_id'));
 
@@ -108,6 +125,7 @@ class ForumController extends BaseController {
 		        	'title' => Input::get('title')
 	        	));
 
+			// associates data
 			$post->parentpost()->associate($parentpost);
 			$post->user()->associate(Auth::user());
 			$data = $cate->post()->save($post);
