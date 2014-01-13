@@ -103,6 +103,7 @@ class ForumController extends BaseController {
 			return Redirect::back();
 
 		}
-		return Redirect::back()->withErrors(array('error_message' => 'message'));
+		$message = '';
+		return Redirect::back()->withErrors(array('error_message' => $message));
 	}
 }

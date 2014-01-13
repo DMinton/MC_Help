@@ -53,4 +53,13 @@ class UsersController extends BaseController {
 		return Redirect::to('login')->withErrors(array('error_message' => $message));
 	}
 
+	/*
+	*	log out user
+	*/
+	public function getLogout(){
+		if(!Auth::logout()){ return Redirect::back(); }
+		$message = 'There was an error logging you out. Please try again.';
+		return Redirect::back()->withErrors(array('error_message' => $message));
+	}
+
 }

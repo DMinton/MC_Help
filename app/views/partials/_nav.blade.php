@@ -20,7 +20,7 @@
         <li>{{ link_to_action('UsersController@getUser', 'Signup') }}</li>
         <li>{{ link_to_action('UsersController@getLoginUser', 'Login') }}</li>
       @else
-
+        <li>{{ link_to_action('UsersController@getLogout', 'Logout') }}</li>
       @endif
     </ul>
   </div>
