@@ -95,6 +95,7 @@ Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesu
 			$category  	= Category::all();
 			$totalposts = 1;
 			$date 		= new DateTime('NOW');
+			$date->modify("-5 days");
 
 			for($i = 0; $i < $parentpost; $i++){
 				$date->modify("+$totalposts minutes");
