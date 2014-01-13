@@ -17,13 +17,22 @@
 			</td>
 			<td>
 				@if($cate->post->first())
-					<small>{{ link_to("forum/$cate->title/" . $cate->post->first()->id, $cate->post->first()->title) }}</small></br>
-					{{ 'Created By: ' . $users->find($cate->post->first()->user_id)->username }}
+					<small>
+						{{ link_to("forum/$cate->title/" . $cate->getLastCatePostParentId(), 
+							$parents->find($cate->getLastCatePostParentId())->title ) }}
+					</small></br>
+					<small>
+						{{ 'Created By: ' . $users->find($parents->find($cate->getLastCatePostParentId())->user_id)->username }}
+					</small></br>
+					<small>
+						{{ 'Last post by: ' . $users->find($cate->getLastCatePostId())->username }}
+					</small>
+
 				@endif
 			</td>
 			<td>
 				@if($cate->post->first())
-					{{ Post::format_time($cate->post->first()->created_at) }}
+					{{ Post::format_time($cate->post->last()->created_at) }}
 				@endif
 			</td>
 		</tr>

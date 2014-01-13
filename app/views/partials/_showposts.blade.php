@@ -1,12 +1,12 @@
 <table class="table table-striped table-bordered">
 	@foreach($posts as $post)
-		<tr class="">
-			<td>
+		<tr class="post-row">
+			<td class="post-data">
 				{{ $post->user->username }}</br>
 				{{ "Posts: " . $post->user->postcount }}</br></br>
 				{{ Post::format_time($post->created_at) }}
 			</td>
-			<td>
+			<td class="post">
 				<table>
 					<tr>
 						<th>

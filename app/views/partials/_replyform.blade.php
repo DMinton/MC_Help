@@ -3,7 +3,7 @@
 	<div class="form-group">
 
 		{{ Form::hidden('parentpost_id', $posts->first()->id) }}
-		{{ Form::hidden('cate_id', $posts->first()->cate_id) }}
+		{{ Form::hidden('category_id', $posts->first()->category_id) }}
 
 		<div class="form-group">
 			{{ Form::label('title') }}

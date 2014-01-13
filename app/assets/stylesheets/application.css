@@ -24,3 +24,11 @@
  #forum_reply_text {
  	width: 50%;
  }
+
+ .post {
+	width: 75%;
+ }
+
+ .post-data {
+ 	width: 25%;
+ }

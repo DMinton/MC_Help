@@ -4,14 +4,14 @@
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 text-center">
 			<h2>
-				Signup
+				Login
 			</h2>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 text-center">
 			
-			{{ Form::open(array('class' => "form-horizontal", 'action' => 'UsersController@postUser')) }}
+			{{ Form::open(array('class' => "form-horizontal", 'action' => 'UsersController@postLoginUser')) }}
 
 				<div class="form-group">
 					<div class='col-md-1'>
@@ -25,13 +25,6 @@
 						{{ Form::label('password') }}
 					</div>
 					{{ Form::password('password') }}
-				</div>
-
-				<div class="form-group">
-					<div class='col-md-1'>
-						{{ Form::label('repeat password') }}
-					</div>
-					{{ Form::password('repeat password') }}
 				</div>
 
 				{{ Form::submit('Signup', array('class' => 'btn btn-default')) }}

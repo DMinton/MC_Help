@@ -25,22 +25,24 @@ class DatabaseSeeder extends Seeder {
 	    {
 	        DB::table('users')->delete();
 
-	        User::create(array(
-	        	'username' => 'David',
-	        	'password' => 'password',
-	        	));
-	        User::create(array(
-	        	'username' => 'Adam',
-	        	'password' => 'password',
-	        	));
-	        User::create(array(
-	        	'username' => 'Ben',
-	        	'password' => 'password',
-	        	));
-	        User::create(array(
-	        	'username' => 'Joel',
-	        	'password' => 'password'
-	        	));
+	        $pass = Hash::make('password');
+	        
+	        $users = array(	
+	        				'David',
+	        				'Adam',
+	        				'Ben',
+	        				'Joel',
+	        				'Patrick'
+	        			);
+
+	        foreach($users as $user){
+		        $save = User::create(array(
+					        	'username' => $user,
+					        	'password' => $pass,
+			        	));
+		        $save->save();
+	    	}
+
 	    }
 
 	}
@@ -52,20 +54,24 @@ class DatabaseSeeder extends Seeder {
 	        DB::table('categories')->delete();
 
 	        Category::create(array(
-	        	'title' => 'category title',
-	        	'description' => 'blah description blah'
-	        	));
-	        Category::create(array(
-	        	'title' => 'category title 2',
-	        	'description' => 'blah description 2 blah'
-	        	));
-	        Category::create(array(
 	        	'title' => 'Computer Science',
 	        	'description' => 'For talking about all the new technologies.'
 	        	));
 	        Category::create(array(
+	        	'title' => 'Math',
+	        	'description' => 'For closely approaching but not touching mathematics.'
+	        	));
+	        Category::create(array(
+	        	'title' => 'Fine Arts',
+	        	'description' => 'The finer things in life..'
+	        	));
+	        Category::create(array(
 	        	'title' => 'Business',
 	        	'description' => 'For discussing business classes and majors.'
+	        	));
+	        Category::create(array(
+	        	'title' => 'Humanities',
+	        	'description' => 'Because are we not all human.'
 	        	));
 	    }
 
@@ -76,42 +82,52 @@ class DatabaseSeeder extends Seeder {
 	    public function run()
 	    {
 	        DB::table('posts')->delete();
+	        
+	        $lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pretium urna purus, et sagittis orci blandit cursus. Quisque at elit lorem. Praesent nec auctor enim, ac volutpat velit. Nullam euismod consequat fermentum. Proin accumsan justo felis, in eleifend erat tristique a. Curabitur in cursus lorem. Proin id mollis magna. Duis euismod auctor pellentesque. Morbi a gravida diam. In hac habitasse platea dictumst.
 
-	        Post::create(array(
-	        	'content' => 'blah blah blah content 1 blah blah blah',
-	        	'title' => 'title 1',
-	        	'parentpost_id' => '0',
-	        	'cate_id' => '1',
-	        	'user_id' => '1'
-	        	));
-	        Post::create(array(
-	        	'content' => 'blah blah blah content 2 blah blah blah',
-	        	'title' => 'title 2',
-	        	'parentpost_id' => '0',
-	        	'cate_id' => '2',
-	        	'user_id' => '2'
-	        	));
-	        Post::create(array(
-	        	'content' => 'blah blah blah content 3 blah blah blah',
-	        	'title' => 'title 3',
-	        	'parentpost_id' => '1',
-	        	'cate_id' => '1',
-	        	'user_id' => '3'
-	        	));
-	        Post::create(array(
-	        	'content' => 'blah blah blah content 4 blah blah blah',
-	        	'title' => 'title 4',
-	        	'parentpost_id' => '2',
-	        	'cate_id' => '2',
-	        	'user_id' => '4'
-	        	));
-	        Post::create(array(
-	        	'content' => 'blah blah blah content 5 blah blah blah',
-	        	'title' => 'title 5',
-	        	'parentpost_id' => '2',
-	        	'cate_id' => '2',
-	        	'user_id' => '1'
-	        	));
+Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesuada nulla massa eu urna. Cras ut adipiscing sapien. Donec ultricies metus lobortis, cursus urna sit amet, elementum est. Sed venenatis ante vel tortor placerat, eu.";
+
+			$parentpost = 30;
+			$replys 	= 70;
+
+			$usercount 	= User::count();
+			$catecount 	= Category::count();
+			$category  	= Category::all();
+			$totalposts = 1;
+			$date 		= new DateTime('NOW');
+
+			for($i = 0; $i < $parentpost; $i++){
+				$date->modify("+$totalposts minutes");
+				$post = Post::create(array(
+				        	'content' 		=> 	$lorem,
+				        	'title' 		=> 	'Title ' . $totalposts++,
+				        	'parentpost_id' => 	'0',
+				        	'category_id' 		=> 	mt_rand( 1, $catecount ),
+				        	'user_id' 		=> 	mt_rand( 1, $usercount ),
+				        	'created_at'	=>	$date,
+				        	'updated_at'	=>	$date
+	        			));
+				User::find($post->user_id)->increment('postcount');
+				$post->save();
+			}
+
+			for($i = 0; $i < $replys; $i++){
+				$date->modify("+$totalposts minutes");
+
+				$parentpost_id = mt_rand( 1, $parentpost );
+				$category_id = Post::where('id', '=', $parentpost_id)->first()->category_id;
+
+				$post = Post::create(array(
+				        	'content' 		=> 	$lorem,
+				        	'title' 		=> 	'Title ' . $totalposts++,
+				        	'parentpost_id' => 	$parentpost_id,
+				        	'category_id' 	=> 	$category_id,
+				        	'user_id' 		=> 	mt_rand( 1, $usercount ),
+				        	'created_at'	=>	$date,
+				        	'updated_at'	=>	$date
+	        			));
+				User::find($post->user_id)->increment('postcount');
+				$post->save();
+			}
 	    }
-
 	}

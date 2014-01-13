@@ -13,15 +13,19 @@ class CreatePostsTable extends Migration {
 	public function up()
 	{
 		Schema::create('posts', function(Blueprint $table) {
-			$table->increments('id');
-			$table->integer('user_id')->unsigned();
-			$table->integer('cate_id')->unsigned();
-			$table->integer('parentpost_id')->default(0)->unsigned();
-			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-			$table->foreign('cate_id')->references('id')->on('posts')->onDelete('cascade');
-			$table->foreign('parentpost_id')->references('id')->on('posts')->onDelete('cascade');
+
+			$table->increments('id')->index();
 			$table->string('title', 128);
 			$table->text('content');
+			$table->integer('parentpost_id')->default(0)->unsigned()->index();
+
+			$table->integer('user_id')->unsigned()->index();
+			$table->integer('category_id')->unsigned()->index();
+
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+			$table->foreign('parentpost_id')->references('id')->on('posts')->onDelete('cascade');
+
 			$table->timestamps();
 		});
 	}

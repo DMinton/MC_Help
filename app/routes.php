@@ -1,5 +1,6 @@
 <?php
 
+
 Route::get(		'/',					'HomeController@getIndex');
 Route::get(		'/search',				'HomeController@getSearch');
 
@@ -11,3 +12,5 @@ Route::post(	'/forum/reply',			'ForumController@postPost');
 Route::get(		'/users',				'UsersController@getIndex');
 Route::get(		'/signup',				'UsersController@getUser');
 Route::post(	'/signup',				'UsersController@postUser');
+Route::get(		'/login',				'UsersController@getLoginUser');
+Route::post(	'/login',				'UsersController@postLoginUser');

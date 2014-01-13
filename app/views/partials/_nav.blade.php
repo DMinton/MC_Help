@@ -15,6 +15,13 @@
       <li>{{ link_to_action('ForumController@getCategoryIndex', 'Forum') }}</li>
       <li>{{ link_to_action('UsersController@getIndex', 'User Database') }}</li>
       <li>{{ link_to_action('HomeController@getSearch', 'Search') }}</li>
+      
+      @if(!Auth::check())
+        <li>{{ link_to_action('UsersController@getUser', 'Signup') }}</li>
+        <li>{{ link_to_action('UsersController@getLoginUser', 'Login') }}</li>
+      @else
+
+      @endif
     </ul>
   </div>
 </nav>

@@ -7,7 +7,15 @@ class Category extends Eloquent {
 
 	public function post()
     {
-        return $this->hasMany('Post', 'cate_id');
+        return $this->hasMany('Post', 'category_id');
+    }
+
+    public function getLastCatePostParentId(){
+    	return $this->post->last()->parentpost_id;
+    }
+
+    public function getLastCatePostId(){
+    	return $this->post->last()->user_id;
     }
 
 

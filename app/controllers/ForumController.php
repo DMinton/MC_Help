@@ -6,11 +6,17 @@ class ForumController extends BaseController {
 	*	Displays all categories
 	*/
 	public function getCategoryIndex(){
-		$categories = Category::orderBy('title')
+		$categories = Category::with('post')
+					->orderBy('title')
 					->get();
-		$users = User::all();
 
-		return View::make('forum.category.index', array('categories' => $categories, 'users' => $users));
+		$parents = Post::where('parentpost_id', '=', 0)
+					->get();
+
+		$users = User::where('postcount', '>', 0)
+					->get();
+
+		return View::make('forum.category.index', array('categories' => $categories, 'users' => $users, 'parents' => $parents));
 	}
 
 	/*
@@ -25,18 +31,29 @@ class ForumController extends BaseController {
 			return View::make('home.notfound');
 		}
 
-		$posts = Post::where('cate_id', '=', $cate->id)
-					->where('parentpost_id', '=', 0)
-					->orderBy('created_at')
+		$posts = Post::with('user', 'getPosts')
+					->where('category_id', '=', $cate->id)
+					->where('parentpost_id', '!=', 0)
+					->orderBy('created_at', 'asc')
+					->groupBy('parentpost_id')
 					->get();
 
-		$users = Post::where('parentpost_id', '>', 0)
-					->orderBy('created_at', 'asc')
-					->distinct('parentpost_id')
+		$parentposts = Post::with('user', 'getPosts')
+					->where('category_id', '=', $cate->id)
+					->where('parentpost_id', '=', 0)
+					->orderBy('created_at', 'desc')
+					->get();
+
+		$users = User::where('postcount', '>', 0)
 					->get();
 					
-		if($posts){
-			return View::make('forum.post.index', array('posts' => $posts, 'cate' => $cate, 'users' => $users));
+		if(!is_null($posts)){
+			return View::make('forum.post.index', array(
+													'posts' => $posts,
+													'cate' => $cate,
+													'users' => $users,
+													'parentposts' => $parentposts
+												));
 		}
 		else{ return View::make('home.notfound'); }
 	}
@@ -50,8 +67,9 @@ class ForumController extends BaseController {
 		$cate_id = Category::where('title', '=', $cate)
 					->get();
 
-		$posts = Post::where('id', '=', $post_id)
-					->where('cate_id', '=', $cate_id->first()->id)
+		$posts = Post::with('user')
+					->where('id', '=', $post_id)
+					->where('category_id', '=', $cate_id->first()->id)
 					->orWhere('parentpost_id', '=', $post_id)
 					->orderBy('created_at')
 					->get();
@@ -69,7 +87,7 @@ class ForumController extends BaseController {
 
 		if (Auth::attempt(array('username' => 'testuser', 'password' => 'test'), true)){
 
-			$cate = Category::find(Input::get('cate_id'));
+			$cate = Category::find(Input::get('category_id'));
 			$parentpost = Post::find(Input::get('parentpost_id'));
 
 			$post = new Post(array(

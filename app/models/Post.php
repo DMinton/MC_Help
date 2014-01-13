@@ -15,12 +15,7 @@ class Post extends Eloquent {
         return $this->belongsTo('User');
     }
 
-    public function parentpost()
-    {
-        return $this->belongsTo('Post');
-    }
-
-    public function hasparentpost()
+    public function getPosts()
     {
         return $this->hasMany('Post', 'parentpost_id');
     }
