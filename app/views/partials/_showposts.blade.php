@@ -9,14 +9,14 @@
 			<td class="post">
 				<table>
 					<tr>
-						<th>
+						<th class="post-title">
 							<small>
 								{{ $post->title }}
 							</small>
 						</th>
 					</tr>
 					<tr>
-						<td>
+						<td class="post-content">
 							{{ $post->content }}
 						</td>
 					</tr>

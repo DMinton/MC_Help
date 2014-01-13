@@ -13,6 +13,6 @@
 		{{ Form::textarea('content', '',array('id' => 'forum_reply_textarea')) }}
 
 	</div>
-	{{ Form::submit('Reply', array('class' => 'btn btn-default')) }}
+	{{ Form::submit('Reply', array('class' => 'btn btn-info')) }}
 
 {{ Form::close() }}

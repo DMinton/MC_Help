@@ -1,9 +1,13 @@
-@if(isset($errors))
+@if($errors->first())
 	<div class="row">
-		<div class="col-md-4 col-md-offset-4 text-center">
-			</br>
-			<p class="text-danger"><large>{{ $errors->first() }}<large></p>
-			</br>
+		<div class="col-md-4 col-md-offset-4">
+			{{ "<div class='alert alert-danger'>" }}
+				<ul>
+			      @foreach($errors->all() as $error)
+			         <li>{{ $error }}</li>
+			      @endforeach
+				</ul>
+			</div>
 		</div>
 	</div>
 @endif

@@ -8,6 +8,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $table = 'users';
 	protected $fillable = array('username', 'password');
 
+	public static $rules = array(
+							   'username'=>'required|min:2',
+							   'password'=>'required|alpha_num|between:6,12|confirmed',
+							   'password_confirmation'=>'required|alpha_num|between:6,12'
+   							);
+
 	public function post()
     {
         return $this->hasMany('Post', 'user_id');

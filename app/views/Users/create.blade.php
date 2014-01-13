@@ -29,12 +29,12 @@
 
 				<div class="form-group">
 					<div class='col-md-1'>
-						{{ Form::label('repeat password') }}
+						{{ Form::label('confirm_password') }}
 					</div>
-					{{ Form::password('repeat password') }}
+					{{ Form::password('confirm_password') }}
 				</div>
 
-				{{ Form::submit('Signup', array('class' => 'btn btn-default')) }}
+				{{ Form::submit('Signup', array('class' => 'btn btn-info')) }}
 			{{ Form::close() }}
 
 		</div>

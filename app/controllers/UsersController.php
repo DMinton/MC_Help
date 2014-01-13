@@ -23,15 +23,22 @@ class UsersController extends BaseController {
 	*/
 	public function postUser(){
 
-		$signup = User::create(array(
-					'username' => Input::get('username'),
-					'password' => Hash::make(Input::get('password'))
-				));
+		$validator = Validator::make(Input::all(), User::$rules);
 
-		if(Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), true)){
-			return Redirect::intended('/');
+		if($validator->passes()){
+			$credentials = array(	'username' => Input::get('username'),
+									'password' => Input::get('password'));
+
+			$signup = User::create(array(
+						'username' => $credentials->username,
+						'password' => Hash::make($credentials->password)
+					));
+
+			if(Auth::attempt($credentials, true)){
+				if(Auth::check()) { return Redirect::intended('/'); }
+			}
 		}
-		return Redirect::to('signup');
+		return Redirect::to('signup')->with('type', 'danger')->withErrors($validator)->withInput();
 	}
 
 	/*
@@ -46,10 +53,14 @@ class UsersController extends BaseController {
 	*/
 	public function postLoginUser(){
 
-		if(Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), true)){
-			return Redirect::intended('/');
+		$credentials = array('username' => Input::get('username'),
+							 'password' => Input::get('password')
+							);
+
+		if(Auth::attempt($credentials, true)){
+			if(Auth::check()) { return Redirect::intended('/'); }
 		}
-		$message = "";
+		$message = "Incorrect username or password.";
 		return Redirect::to('login')->withErrors(array('error_message' => $message));
 	}
 

@@ -63,21 +63,31 @@ class ForumController extends BaseController {
 	*/
 	public function getPost($cate, $post_id){
 
+		try{
+			// gets parentpost if postid is not parents
+			$primarypost = Post::find($post_id);
+			if($primarypost->parentpost_id != 0){
+				$post_id = Post::find($primarypost->parentpost_id)->id;
+				return Redirect::action('ForumController@getPost', array('cate' => $cate, 'id' => $post_id));
+			}
 
-		$cate_id = Category::where('title', '=', $cate)
-					->get();
 
-		$posts = Post::with('user')
-					->where('id', '=', $post_id)
-					->where('category_id', '=', $cate_id->first()->id)
-					->orWhere('parentpost_id', '=', $post_id)
-					->orderBy('created_at')
-					->get();
+			$cate_id = Category::where('title', '=', $cate)
+						->get();
 
-		if($posts){
-			return View::make('forum.post.show', array('posts' => $posts));
+			$posts = Post::with('user')
+						->where('id', '=', $post_id)
+						->where('category_id', '=', $cate_id->first()->id)
+						->orWhere('parentpost_id', '=', $post_id)
+						->orderBy('created_at')
+						->get();
+
+			if($posts->first()->category_id == $primarypost->category_id){
+				return View::make('forum.post.show', array('posts' => $posts));
+			}
+			else{ return View::make('home.notfound'); }
 		}
-		else{ return View::make('home.notfound'); }
+		catch(Exception $error){ return View::make('home.notfound'); }
 	}
 
 	/*
@@ -85,13 +95,16 @@ class ForumController extends BaseController {
 	*/
 	public function postPost(){
 
-		if (Auth::attempt(array('username' => 'testuser', 'password' => 'test'), true)){
+		$content = Input::get('content');
 
+		if ($content && Auth::check()){
+
+			dd($content);
 			$cate = Category::find(Input::get('category_id'));
 			$parentpost = Post::find(Input::get('parentpost_id'));
 
 			$post = new Post(array(
-		        	'content' => Input::get('content'),
+		        	'content' => $content,
 		        	'title' => Input::get('title')
 	        	));
 
@@ -103,7 +116,7 @@ class ForumController extends BaseController {
 			return Redirect::back();
 
 		}
-		$message = '';
+		$message = 'Invalid post.';
 		return Redirect::back()->withErrors(array('error_message' => $message));
 	}
 }

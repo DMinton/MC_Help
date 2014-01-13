@@ -12,23 +12,6 @@
  *= require_tree .
  */
 
- .container { 
- 	padding-top: 70px;
- 	padding-bottom: 70px;
- }
-
- #forum_reply_textarea {
- 	width: 100%;
- }
-
- #forum_reply_text {
- 	width: 50%;
- }
-
- .post {
-	width: 75%;
- }
-
- .post-data {
- 	width: 25%;
- }
+require bootstrap-theme.min.css;
+require bootstrap.min.css;
+require stylesheet.css;

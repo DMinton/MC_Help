@@ -27,7 +27,7 @@
 					{{ Form::password('password') }}
 				</div>
 
-				{{ Form::submit('Signup', array('class' => 'btn btn-default')) }}
+				{{ Form::submit('Signup', array('class' => 'btn btn-info')) }}
 			{{ Form::close() }}
 
 		</div>
