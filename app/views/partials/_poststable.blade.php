@@ -1,6 +1,5 @@
 <table class="table table-striped">
 	@foreach($posts as $post)
-	{{dd($post)}}
 		<tr>
 			<td>
 				{{ link_to_action('ForumController@getPost', $parentposts->find($post->parentpost_id)->title, 
