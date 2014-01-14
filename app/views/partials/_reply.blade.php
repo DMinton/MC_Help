@@ -5,7 +5,11 @@
 		<div class="panel-heading">
 			<h4 class="panel-title">
 				<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-					Reply
+					@if(isset($cate->title))
+						New Post
+					@else
+						Reply
+					@endif
 				</a>
 			</h4>
 		</div>

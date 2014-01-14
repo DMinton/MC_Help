@@ -24,7 +24,6 @@ class CreatePostsTable extends Migration {
 
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-			$table->foreign('parentpost_id')->references('id')->on('posts')->onDelete('cascade');
 
 			$table->timestamps();
 		});

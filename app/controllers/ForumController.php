@@ -39,23 +39,12 @@ class ForumController extends BaseController {
 
 		// gets all posts in category that is not a parent post
 		// groups them and orders by created at
-		$posts = Post::with('user', 'getPosts')
-					->where('category_id', '=', $cate->id)
-					->where('parentpost_id', '!=', 0)
-					->orderBy('created_at', 'asc')
-					->groupBy('parentpost_id')
-					->get();
+		
 
-		// gets all parent posts in category
-		// ordered by created at
-		$parentposts = Post::with('user', 'getPosts')
+		$query = Post::with('user', 'childrenPosts')
 					->where('category_id', '=', $cate->id)
 					->where('parentpost_id', '=', 0)
 					->orderBy('created_at', 'desc')
-					->get();
-
-		// gets all users with a post count
-		$users = User::where('postcount', '>', 0)
 					->get();
 					
 		// checks if posts are found, returns error if not found
@@ -63,8 +52,6 @@ class ForumController extends BaseController {
 			return View::make('forum.post.index', array(
 													'posts' => $posts,
 													'cate' => $cate,
-													'users' => $users,
-													'parentposts' => $parentposts
 												));
 		}
 		else{ return View::make('home.notfound'); }
@@ -117,17 +104,21 @@ class ForumController extends BaseController {
 		// auth user and checks if content field is valid
 		if ($content && Auth::check()){
 
-			$cate = Category::find(Input::get('category_id'));
-			$parentpost = Post::find(Input::get('parentpost_id'));
-
 			$post = new Post(array(
 		        	'content' => $content,
 		        	'title' => Input::get('title')
 	        	));
 
+			$cate = Category::find(Input::get('category_id'));
+			$parentpost = Post::find(Input::get('parentpost_id'));
+
 			// associates data
-			$post->parentpost()->associate($parentpost);
 			$post->user()->associate(Auth::user());
+
+			if(is_null($parentpost)){
+				$parentpost = $post;
+			}
+
 			$data = $cate->post()->save($post);
 			Auth::user()->increment('postcount');
 

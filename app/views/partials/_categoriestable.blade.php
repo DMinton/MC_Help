@@ -16,7 +16,7 @@
 				<small>{{ $cate->description }}</small>
 			</td>
 			<td>
-				@if($cate->post->first())
+				@if(!is_null($parents->find($cate->getLastCatePostParentId())))
 					<small>
 						{{ link_to("forum/$cate->title/" . $cate->getLastCatePostParentId(), 
 							$parents->find($cate->getLastCatePostParentId())->title ) }}
@@ -27,7 +27,13 @@
 					<small>
 						{{ 'Last post by: ' . $users->find($cate->getLastCatePostId())->username }}
 					</small>
-
+				@else
+					<small>
+						{{ link_to("forum/$cate->title/" . $cate->getLastCatePostParent()->id, 
+							$cate->getLastCatePostParent()->title) }}
+					</small></br>
+					<small>
+						{{ 'Created By: ' . $users->find($cate->getLastCatePostParent()->user_id)->username }}
 				@endif
 			</td>
 			<td>
