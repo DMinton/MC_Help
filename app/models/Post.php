@@ -24,7 +24,7 @@ class Post extends Eloquent {
     protected function format_time($date) {
         $time = date_format($date, 'M j, Y') 
                 . "</br>" 
-                . date_format($date, 'g:m A');
+                . date_format($date, 'g:i A');
         return $time;
     }
 }

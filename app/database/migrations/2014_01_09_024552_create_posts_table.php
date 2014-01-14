@@ -17,13 +17,14 @@ class CreatePostsTable extends Migration {
 			$table->increments('id')->index();
 			$table->string('title', 128);
 			$table->text('content');
-			$table->integer('parentpost_id')->index();
 
+			$table->integer('parentpost_id')->unsigned()->nullable()->index();
 			$table->integer('user_id')->unsigned()->index();
 			$table->integer('category_id')->unsigned()->index();
 
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+			$table->foreign('parentpost_id')->references('id')->on('posts')->onDelete('cascade');
 
 			$table->timestamps();
 		});

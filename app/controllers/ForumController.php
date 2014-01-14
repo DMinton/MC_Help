@@ -77,26 +77,46 @@ class ForumController extends BaseController {
 		// auth user and checks if content field is valid
 		if ($content && Auth::check()){
 
-			$post = new Post(array(
-		        	'content' => $content,
-		        	'title' => Input::get('title')
-	        	));
+			$post = new Post();
 
 			$cate = Category::find(Input::get('category_id'));
 			$parentpost = Post::find(Input::get('parentpost_id'));
 
-			// associates data
-			$post->user()->associate(Auth::user());
-
-			if(is_null($parentpost)){
-				$parentpost = $post;
+			if(Input::get('parentpost_id') != 0){
+				$last_update = Last::find(Input::get('parentpost_id'));
+			}
+			else{
+				$last_update = new Last();
+				$last_update->category_id = $cate->id;
 			}
 
-			$data = $cate->post()->save($post);
-			Auth::user()->increment('postcount');
+			// associates data
+			$post->content 			= $content;
+		    $post->title 			= Input::get('title');
+			$post->user()->associate(Auth::user());
+			$post->category()->associate($cate);
 
-			return Redirect::back();
+			if(!is_null($parentpost)){
+		    	$post->parentPost()->associate($parentpost);
+			}
 
+			$success = $post->save();
+
+			if(is_null($parentpost)){
+		    	$post->parentPost()->associate($post);
+		    	$post->save();
+			}
+
+			if($success){
+				Auth::user()->increment('postcount');
+
+				$last_update->last_id = $post->id;
+				$last_update->parentpost_id = $post->parentpost_id;
+				$last_update->save();
+
+				return Redirect::action('ForumController@getPost', 
+							array('cate' => $post->category->title, 'id' => $post->parentpost_id));
+			}
 		}
 		$message = 'Invalid post.';
 		return Redirect::back()->withErrors(array('error_message' => $message));
