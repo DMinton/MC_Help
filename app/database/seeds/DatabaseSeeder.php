@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('UserTableSeeder');
 		$this->call('CategoryTableSeeder');
 		$this->call('PostTableSeeder');
+		$this->call('LastTableSeeder');
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 	}
@@ -102,7 +103,7 @@ Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesu
 				$post = Post::create(array(
 				        	'content' 		=> 	$lorem,
 				        	'title' 		=> 	'Title ' . $totalposts++,
-				        	'parentpost_id' => 	'0',
+				        	'parentpost_id' => 	$i+1,
 				        	'category_id' 		=> 	mt_rand( 1, $catecount ),
 				        	'user_id' 		=> 	mt_rand( 1, $usercount ),
 				        	'created_at'	=>	$date,
@@ -131,4 +132,33 @@ Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesu
 				$post->save();
 			}
 	    }
+	}
+
+	class LastTableSeeder extends Seeder {
+
+	    public function run()
+	    {
+	        DB::table('lasts')->delete();
+	        
+	        $posts = Post::all();
+
+	        for($i = 0; $i < count($posts); $i++){
+	        	$post = $posts->find($i+1);
+		        if($post->id == $post->parentpost_id){
+		        	Last::create(array(
+		        			'parentpost_id' => $post->parentpost_id,
+		        			'last_id' => $post->id,
+		        			'category_id' => $post->category_id
+		        		));
+		        }
+		        else{
+		        	$last = Last::find($post->parentpost_id);
+		        	$last->last_id = $post->id;
+		        	$last->updated_at = $post->created_at;
+		        	$last->save();
+		        }
+	    	}
+
+	    }
+
 	}

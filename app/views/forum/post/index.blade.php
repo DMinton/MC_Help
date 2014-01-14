@@ -10,7 +10,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
-			@include('partials._poststable')
+			@include('partials._postsindex')
 		</div>
 	</div>
 	@if(Auth::check())

@@ -12,15 +12,7 @@ class ForumController extends BaseController {
 					->orderBy('title')
 					->get();
 
-		// gets all parent posts
-		$parents = Post::where('parentpost_id', '=', 0)
-					->get();
-
-		// gets all users with a postcount
-		$users = User::where('postcount', '>', 0)
-					->get();
-
-		return View::make('forum.category.index', array('categories' => $categories, 'users' => $users, 'parents' => $parents));
+		return View::make('forum.category.index', array('categories' => $categories));
 	}
 
 	/*
@@ -37,24 +29,11 @@ class ForumController extends BaseController {
 			return View::make('home.notfound');
 		}
 
-		// gets all posts in category that is not a parent post
-		// groups them and orders by created at
-		
-
-		$query = Post::with('user', 'childrenPosts')
+		$posts = Last::with('parentPost')
 					->where('category_id', '=', $cate->id)
-					->where('parentpost_id', '=', 0)
-					->orderBy('created_at', 'desc')
-					->get();
-					
-		// checks if posts are found, returns error if not found
-		if(!is_null($posts)){
-			return View::make('forum.post.index', array(
-													'posts' => $posts,
-													'cate' => $cate,
-												));
-		}
-		else{ return View::make('home.notfound'); }
+					->orderBy('last_id', 'desc')->get();
+
+		return View::make('forum.post.index', array('cate' => $cate, 'posts' => $posts ));
 	}
 
 	/*
@@ -62,36 +41,30 @@ class ForumController extends BaseController {
 	*/
 	public function getPost($cate, $post_id){
 
-		// try is used in case user inputs incorrect url data
-		try{
-			// gets parentpost if postid is not parents
-			// redirects if post is a child
+			//finds post and checks if it is the parent
+			// and then checks if the category is correct
+			// redirects if either is incorrect
 			$primarypost = Post::find($post_id);
-			if($primarypost->parentpost_id != 0){
-				$post_id = Post::find($primarypost->parentpost_id)->id;
-				return Redirect::action('ForumController@getPost', array('cate' => $cate, 'id' => $post_id));
+			if($primarypost->parentpost_id != $primarypost->id){
+				return Redirect::action('ForumController@getPost', 
+							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
 			}
 
-			// gets category data
-			$cate_id = Category::where('title', '=', $cate)
-						->get();
+			if($cate != $primarypost->category->title){
+				return Redirect::action('ForumController@getPost', 
+							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
+			}
+
 
 			// gets all posts with a specific parent and
 			// in category
 			$posts = Post::with('user')
-						->where('id', '=', $post_id)
-						->where('category_id', '=', $cate_id->first()->id)
+						->where('category_id', '=', $primarypost->category)
 						->orWhere('parentpost_id', '=', $post_id)
 						->orderBy('created_at')
 						->get();
 
-			// checks category id data
-			if($posts->first()->category_id == $primarypost->category_id){
-				return View::make('forum.post.show', array('posts' => $posts));
-			}
-			else{ return View::make('home.notfound'); }
-		}
-		catch(Exception $error){ return View::make('home.notfound'); }
+			return View::make('forum.post.show', array('posts' => $posts));
 	}
 
 	/*

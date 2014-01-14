@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration {
 			$table->increments('id')->index();
 			$table->string('title', 128);
 			$table->text('content');
-			$table->integer('parentpost_id')->default(0)->unsigned()->index();
+			$table->integer('parentpost_id')->index();
 
 			$table->integer('user_id')->unsigned()->index();
 			$table->integer('category_id')->unsigned()->index();

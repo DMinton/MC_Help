@@ -14,7 +14,7 @@ class Post extends Eloquent {
     }
 
     public function parentPost() {
-        return $this->belongsTo('Post');
+        return $this->belongsTo('Post', 'parentpost_id');
     }
 
     public function childrenPosts() {
@@ -27,6 +27,4 @@ class Post extends Eloquent {
                 . date_format($date, 'g:m A');
         return $time;
     }
-
-
 }

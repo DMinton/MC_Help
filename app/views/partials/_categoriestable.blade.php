@@ -12,34 +12,24 @@
 	@foreach($categories as $cate)
 		<tr class="">
 			<td>
-				<h4>{{ link_to("forum/$cate->title", $cate->title) }}</h4>
+				<h4>{{ link_to_action("ForumController@getPostIndex", $cate->title, array($cate->title)) }}</h4>
 				<small>{{ $cate->description }}</small>
 			</td>
 			<td>
-				@if(!is_null($parents->find($cate->getLastCatePostParentId())))
-					<small>
-						{{ link_to("forum/$cate->title/" . $cate->getLastCatePostParentId(), 
-							$parents->find($cate->getLastCatePostParentId())->title ) }}
-					</small></br>
-					<small>
-						{{ 'Created By: ' . $users->find($parents->find($cate->getLastCatePostParentId())->user_id)->username }}
-					</small></br>
-					<small>
-						{{ 'Last post by: ' . $users->find($cate->getLastCatePostId())->username }}
-					</small>
-				@else
-					<small>
-						{{ link_to("forum/$cate->title/" . $cate->getLastCatePostParent()->id, 
-							$cate->getLastCatePostParent()->title) }}
-					</small></br>
-					<small>
-						{{ 'Created By: ' . $users->find($cate->getLastCatePostParent()->user_id)->username }}
-				@endif
+				<small>
+					{{ link_to_action("ForumController@getPost", $cate->post->last()->parentPost->title, 
+												array($cate->title, $cate->post->last()->parentpost_id)) }}
+				</small></br>
+				<small>
+					{{ 'Created By: ' . $cate->post->last()->parentPost->user->username }}
+				</small></br>
+				<small>
+					{{ 'Last post by: ' . $cate->post->last()->user->username }}
+				</small>
 			</td>
 			<td>
-				@if($cate->post->first())
-					{{ Post::format_time($cate->post->last()->created_at) }}
-				@endif
+				</br>
+				{{ Post::format_time($cate->post->last()->created_at) }}
 			</td>
 		</tr>
 	@endforeach
