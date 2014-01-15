@@ -33,7 +33,7 @@ class ForumController extends BaseController {
 					->where('category_id', '=', $cate->id)
 					->orderBy('last_id', 'desc')->get();
 
-		return View::make('forum.post.index', array('cate' => $cate, 'posts' => $posts ));
+		return View::make('forum.post.index', array('cate' => $cate, 'posts' => $posts));
 	}
 
 	/*
@@ -96,12 +96,14 @@ class ForumController extends BaseController {
 			$post->user()->associate(Auth::user());
 			$post->category()->associate($cate);
 
+			// if not null then the post is not a parent
 			if(!is_null($parentpost)){
 		    	$post->parentPost()->associate($parentpost);
 			}
 
 			$success = $post->save();
 
+			// if null then post is parent
 			if(is_null($parentpost)){
 		    	$post->parentPost()->associate($post);
 		    	$post->save();

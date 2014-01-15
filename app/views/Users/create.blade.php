@@ -29,9 +29,9 @@
 
 				<div class="form-group">
 					<div class='col-md-1'>
-						{{ Form::label('confirm_password') }}
+						{{ Form::label('password_confirmation') }}
 					</div>
-					{{ Form::password('confirm_password') }}
+					{{ Form::password('password_confirmation') }}
 				</div>
 
 				{{ Form::submit('Signup', array('class' => 'btn btn-info')) }}

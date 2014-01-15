@@ -16,20 +16,24 @@
 				<small>{{ $cate->description }}</small>
 			</td>
 			<td>
-				<small>
-					{{ link_to_action("ForumController@getPost", $cate->post->last()->parentPost->title, 
-												array($cate->title, $cate->post->last()->parentpost_id)) }}
-				</small></br>
-				<small>
-					{{ 'Created By: ' . $cate->post->last()->parentPost->user->username }}
-				</small></br>
-				<small>
-					{{ 'Last post by: ' . $cate->post->last()->user->username }}
-				</small>
+				@if(!is_null($cate->post->last()))
+					<small>
+						{{ link_to_action("ForumController@getPost", $cate->post->last()->parentPost->title, 
+													array($cate->title, $cate->post->last()->parentpost_id)) }}
+					</small></br>
+					<small>
+						{{ 'Created By: ' . $cate->post->last()->parentPost->user->username }}
+					</small></br>
+					<small>
+						{{ 'Last post by: ' . $cate->post->last()->user->username }}
+					</small>
+				@endif
 			</td>
 			<td>
-				</br>
-				{{ Post::format_time($cate->post->last()->created_at) }}
+				@if(!is_null($cate->post->last()))
+					</br>
+					{{ Post::format_time($cate->post->last()->created_at) }}
+				@endif
 			</td>
 		</tr>
 	@endforeach

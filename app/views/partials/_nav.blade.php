@@ -9,9 +9,9 @@
     </button>
     {{ link_to_action('HomeController@getIndex', 'MC_Help', array(),array('class' => 'navbar-brand')) }}
   </div>
-
   <div class="collapse navbar-collapse navbar-right" id="navbar-collapse">
     <ul class="nav navbar-nav">
+
       <li>{{ link_to_action('ForumController@getCategoryIndex', 'Forum') }}</li>
       <li>{{ link_to_action('UsersController@getIndex', 'User Database') }}</li>
       <li>{{ link_to_action('HomeController@getSearch', 'Search') }}</li>
@@ -22,6 +22,7 @@
       @else
         <li>{{ link_to_action('UsersController@getLogout', 'Logout') }}</li>
       @endif
+      
     </ul>
   </div>
 </nav>

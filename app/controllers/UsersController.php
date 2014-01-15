@@ -26,13 +26,18 @@ class UsersController extends BaseController {
 		$validator = Validator::make(Input::all(), User::$rules);
 
 		if($validator->passes()){
-			$credentials = array(	'username' => Input::get('username'),
-									'password' => Input::get('password'));
 
-			$signup = User::create(array(
-						'username' => $credentials->username,
-						'password' => Hash::make($credentials->password)
-					));
+			$credentials = array(	
+									'username' => Input::get('username'),
+									'password' => Input::get('password')
+								);
+
+			$newuser = new User();
+
+			$newuser->username = $credentials['username'];
+			$newuser->password = Hash::make($credentials['password']);
+
+			$newuser->save();
 
 			if(Auth::attempt($credentials, true) && Auth::check()){
 				return Redirect::intended('/');
