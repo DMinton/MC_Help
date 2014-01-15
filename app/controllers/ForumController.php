@@ -55,7 +55,6 @@ class ForumController extends BaseController {
 							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
 			}
 
-
 			// gets all posts with a specific parent and
 			// in category
 			$posts = Post::with('user')
