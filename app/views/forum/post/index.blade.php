@@ -6,6 +6,9 @@
 			<h2>
 				{{ $cate->title }}
 			</h2>
+			@if(isset($results))
+				<h4>{{$results}}</h4>
+			@endif
 		</div>
 	</div>
 	<div class="row">

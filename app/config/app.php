@@ -108,6 +108,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Way\Generators\GeneratorsServiceProvider',
 		'Codesleeve\AssetPipeline\AssetPipelineServiceProvider',
+		'Way\Generators\GeneratorsServiceProvider',
 	),
 
 	/*

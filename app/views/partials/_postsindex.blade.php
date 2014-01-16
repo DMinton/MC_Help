@@ -1,7 +1,6 @@
 <table class="table table-striped">
 	@foreach($posts as $post)
 		@if(is_null($post->parentPost))
-		{{dd($post)}}
 			<tr>
 				<td>
 					{{ link_to_action('ForumController@getPost', $post->title, 

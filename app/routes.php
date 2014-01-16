@@ -5,6 +5,7 @@
 */
 Route::get(		'/',					'HomeController@getIndex');
 Route::get(		'/search',				'HomeController@getSearch');
+Route::post(	'/results',				'HomeController@postSearch');
 
 /*
 *	forum routes
