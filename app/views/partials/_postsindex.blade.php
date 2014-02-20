@@ -50,3 +50,6 @@
 		</tr>
 	@endif
 </table>
+<div>
+	{{ $posts->links() }}
+</div>

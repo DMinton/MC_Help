@@ -31,7 +31,7 @@ class ForumController extends BaseController {
 
 		$posts = Last::with('parentPost')
 					->where('category_id', '=', $cate->id)
-					->orderBy('last_id', 'desc')->get();
+					->orderBy('last_id', 'desc')->paginate(10);
 
 		return View::make('forum.post.index', array('cate' => $cate, 'posts' => $posts));
 	}
@@ -61,7 +61,7 @@ class ForumController extends BaseController {
 						->where('category_id', '=', $primarypost->category)
 						->orWhere('parentpost_id', '=', $post_id)
 						->orderBy('created_at')
-						->get();
+						->paginate(10);
 
 			return View::make('forum.post.show', array('posts' => $posts));
 	}
@@ -90,8 +90,9 @@ class ForumController extends BaseController {
 			}
 
 			// associates data
-			$post->content 			= $content;
-		    $post->title 			= Input::get('title');
+			$post->content 	= $content;
+		    $post->title 	= Input::get('title');
+
 			$post->user()->associate(Auth::user());
 			$post->category()->associate($cate);
 
@@ -108,6 +109,7 @@ class ForumController extends BaseController {
 		    	$post->save();
 			}
 
+			
 			if($success){
 				Auth::user()->increment('postcount');
 
