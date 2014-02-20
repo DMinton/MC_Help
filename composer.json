@@ -5,10 +5,12 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*",
-		"way/generators": "dev-master",
-		"codesleeve/asset-pipeline": "dev-master",
-		"raveren/kint": "dev-master"
-	},
+		"codesleeve/asset-pipeline": "dev-master"	},
+	"require-dev": {
+    	"phpunit/phpunit": "3.7.*",
+    	"raveren/kint": "dev-master",
+    	"way/generators": "dev-master"
+  	},
 	"autoload": {
 		"classmap": [
 			"app/commands",

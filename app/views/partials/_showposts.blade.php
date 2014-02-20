@@ -25,3 +25,6 @@
 		</tr>
 	@endforeach
 </table>
+<div>
+	{{ $posts->links() }}
+</div>
