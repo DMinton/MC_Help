@@ -3,14 +3,21 @@
 class ForumController extends BaseController {
 
 	/*
+	*	Constructor
+	*/	
+	public function __construct(Category $category, Post $post, Last $last){
+		$this->post = $post;
+		$this->category = $category;
+		$this->last = $last;
+	}
+
+	/*
 	*	Displays all categories
 	*/
 	public function getCategoryIndex(){
 
 		// gets all categories and orders by name
-		$categories = Category::with('post')
-					->orderBy('title')
-					->get();
+		$categories = $this->category->getCategories();
 
 		return View::make('forum.category.index', array('categories' => $categories));
 	}
@@ -21,17 +28,14 @@ class ForumController extends BaseController {
 	public function getPostIndex($category){
 
 		// gets category data
-		$cate = Category::where('title', '=', $category)
-					->first();
+		$cate = $this->category->getCategoryIndex($category);
 
 		// if category not found, return error page
 		if(is_null($cate)){
 			return View::make('home.notfound');
 		}
 
-		$posts = Last::with('parentPost')
-					->where('category_id', '=', $cate->id)
-					->orderBy('last_id', 'desc')->paginate(10);
+		$posts = $this->last->getLastPost($cate->id);
 
 		return View::make('forum.post.index', array('cate' => $cate, 'posts' => $posts));
 	}
@@ -44,7 +48,7 @@ class ForumController extends BaseController {
 			//finds post and checks if it is the parent
 			// and then checks if the category is correct
 			// redirects if either is incorrect
-			$primarypost = Post::find($post_id);
+			$primarypost = $this->post->findPost($post_id);
 			if($primarypost->parentpost_id != $primarypost->id){
 				return Redirect::action('ForumController@getPost', 
 							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
@@ -57,11 +61,7 @@ class ForumController extends BaseController {
 
 			// gets all posts with a specific parent and
 			// in category
-			$posts = Post::with('user')
-						->where('category_id', '=', $primarypost->category)
-						->orWhere('parentpost_id', '=', $post_id)
-						->orderBy('created_at')
-						->paginate(10);
+			$posts = $this->post->getParentpostAndCategory($primarypost->category, $post_id);
 
 			return View::make('forum.post.show', array('posts' => $posts));
 	}
@@ -78,11 +78,11 @@ class ForumController extends BaseController {
 
 			$post = new Post();
 
-			$cate = Category::find(Input::get('category_id'));
-			$parentpost = Post::find(Input::get('parentpost_id'));
+			$cate = $this->category->findCategory(Input::get('category_id'));
+			$parentpost = $this->post->findPost(Input::get('parentpost_id'));
 
 			if(Input::get('parentpost_id') != 0){
-				$last_update = Last::find(Input::get('parentpost_id'));
+				$last_update = $this->last->findLast(Input::get('parentpost_id'));
 			}
 			else{
 				$last_update = new Last();
