@@ -52,6 +52,7 @@ return array(
 			'prefix'   => '',
 		),
 
+
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => getenv('DB_HOST'),
