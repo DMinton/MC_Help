@@ -1,13 +1,19 @@
 <?php
 
+use repository\EloquentUserModel as UserModel;
+
 class UsersController extends BaseController {
+
+	public function __construct(UserModel $user) {
+		$this->user = $user;
+	}
 
 	/*
 	*	Displays all users
 	*/
 	public function getIndex()
 	{
-		$users = User::orderBy('username')->get();
+		$users = $this->user->orderUser();
 		return View::make('users.index', array('users' => $users));
 	}
 
@@ -32,14 +38,8 @@ class UsersController extends BaseController {
 									'password' => Input::get('password')
 								);
 
-			$newuser = new User();
-
-			$newuser->username = $credentials['username'];
-			$newuser->password = Hash::make($credentials['password']);
-
-			$newuser->save();
-
-			if(Auth::attempt($credentials, true) && Auth::check()){
+			// if success, return home
+			if($this->user->createUser($credentials)) {
 				return Redirect::intended('/');
 			}
 		}

@@ -1,25 +1,29 @@
 <?php
 
+use repository\EloquentCategoryModel as CategoryModel;
+use repository\EloquentPostModel as PostModel;
+
 class HomeController extends BaseController {
+
+	public function __construct(CategoryModel $category, PostModel $post) {
+		$this->category = $category;
+		$this->post = $post;
+	}
 
 	public function getIndex() {
 		return View::make('home.index');
 	}
 
 	public function getSearch() {
-		$categories = Category::orderBy('title')->lists('title', 'id');
+		$categories = $this->category->orderCategories();
 		return View::make('home.search', array( 'categories' => $categories));
 	}
 
 	public function postSearch() {
 		$search = Input::get('search');
-		$cate = Category::where('id', '=', Input::get('category'))
-						->first();
-						
-		$posts = Post::where('category_id', '=', $cate->id)
-						->where('content', 'like', "%$search%")
-						->orderBy('created_at')
-						->get();
+		$cate = $this->category->findCategory(Input::get('category'));
+
+		$posts = $this->post->getSearchQuery($cate->id, $search);
 
 		$results = 'search results';
 

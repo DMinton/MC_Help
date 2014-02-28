@@ -1,11 +1,15 @@
 <?php
 
+use repository\EloquentCategoryModel as CategoryModel;
+use repository\EloquentLastModel as LastModel;
+use repository\EloquentPostModel as PostModel;
+
 class ForumController extends BaseController {
 
 	/*
 	*	Constructor
 	*/	
-	public function __construct(Category $category, Post $post, Last $last){
+	public function __construct(CategoryModel $category, PostModel $post, LastModel $last){
 		$this->post = $post;
 		$this->category = $category;
 		$this->last = $last;
