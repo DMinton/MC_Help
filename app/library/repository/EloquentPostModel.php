@@ -22,4 +22,30 @@ class EloquentPostModel implements PostModelInterface {
                         ->orderBy('created_at')
                         ->paginate(10);
     }
+
+    public function createPost($data, $cate, $user, $parentpost){
+
+        $post = new Post();
+
+        // associates data
+        $post->content  = $data['content'];
+        $post->title    = $data['title'];
+
+        $post->user()->associate($user);
+        $post->category()->associate($cate);
+
+        // if not null then the post is not a parent
+        if( ! is_null($parentpost)){
+            $post->parentPost()->associate($parentpost);
+        }
+
+        $post->save();
+
+        // if null then post is parent
+        if(is_null($parentpost)){
+            $post->parentPost()->associate($post);
+            $post->save();
+        }
+        return $post;
+    }
 }

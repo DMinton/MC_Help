@@ -49,7 +49,7 @@ class ForumController extends BaseController {
 	*/
 	public function getPost($cate, $post_id){
 
-			//finds post and checks if it is the parent
+			// finds post and checks if it is the parent
 			// and then checks if the category is correct
 			// redirects if either is incorrect
 			$primarypost = $this->post->findPost($post_id);
@@ -80,46 +80,27 @@ class ForumController extends BaseController {
 		// auth user and checks if content field is valid
 		if ($content && Auth::check()){
 
-			$post = new Post();
+			// creates array containing data for post
+			$data = array(
+					'category_id' 	=> Input::get('category_id'),
+					'parentpost_id' => Input::get('parentpost_id'),
+					'title' 		=> Input::get('title'),
+					'content' 		=> $content
+				);
 
-			$cate = $this->category->findCategory(Input::get('category_id'));
-			$parentpost = $this->post->findPost(Input::get('parentpost_id'));
+			// gets category and parentpost
+			$cate = $this->category->findCategory($data['category_id']);
+			$parentpost = $this->post->findPost($data['parentpost_id']);
 
-			if(Input::get('parentpost_id') != 0){
-				$last_update = $this->last->findLast(Input::get('parentpost_id'));
-			}
-			else{
-				$last_update = new Last();
-				$last_update->category_id = $cate->id;
-			}
-
-			// associates data
-			$post->content 	= $content;
-		    $post->title 	= Input::get('title');
-
-			$post->user()->associate(Auth::user());
-			$post->category()->associate($cate);
-
-			// if not null then the post is not a parent
-			if(!is_null($parentpost)){
-		    	$post->parentPost()->associate($parentpost);
-			}
-
-			$success = $post->save();
-
-			// if null then post is parent
-			if(is_null($parentpost)){
-		    	$post->parentPost()->associate($post);
-		    	$post->save();
-			}
-
+			// creates post and returns results
+			$post = $this->post->createPost($data, $cate, Auth::user(), $parentpost);
 			
-			if($success){
+			// if post did not fail
+			if( ! is_null($post->id)){
 				Auth::user()->increment('postcount');
 
-				$last_update->last_id = $post->id;
-				$last_update->parentpost_id = $post->parentpost_id;
-				$last_update->save();
+				// creates last
+				$this->last->createLast($post, $cate->id);
 
 				return Redirect::action('ForumController@getPost', 
 							array('cate' => $post->category->title, 'id' => $post->parentpost_id));
