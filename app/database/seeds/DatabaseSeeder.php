@@ -2,6 +2,19 @@
 
 class DatabaseSeeder extends Seeder {
 
+	public $parentpost 	= 50;
+	public $replys 		= 450;
+	public $usercount	= 25;
+
+	public function getFaker() {
+		if (empty($this->faker)) {
+			$faker = Faker\Factory::create();
+			$faker->addProvider(new Faker\Provider\Base($faker));
+			$faker->addProvider(new Faker\Provider\Lorem($faker));
+		}
+		return $this->faker = $faker;
+	}
+
 	/**
 	 * Run the database seeds.
 	 *
@@ -20,7 +33,7 @@ class DatabaseSeeder extends Seeder {
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 	}
 }
-	class UserTableSeeder extends Seeder {
+	class UserTableSeeder extends DatabaseSeeder {
 
 	    public function run()
 	    {
@@ -44,11 +57,24 @@ class DatabaseSeeder extends Seeder {
 		        $save->save();
 	    	}
 
+	    	$faker = $this->getFaker();
+
+	    	$usercount = $this->usercount;
+
+	    	for($i = 0; $i < $usercount; $i++) {
+	    		$user = $faker->name();
+	    		$save = User::create(array(
+					        	'username' => $user,
+					        	'password' => $pass,
+			        	));
+		        $save->save();
+	    	}
+
 	    }
 
 	}
 
-	class CategoryTableSeeder extends Seeder {
+	class CategoryTableSeeder extends DatabaseSeeder {
 
 	    public function run()
 	    {
@@ -78,18 +104,16 @@ class DatabaseSeeder extends Seeder {
 
 	}
 
-	class PostTableSeeder extends Seeder {
+	class PostTableSeeder extends DatabaseSeeder {
 
 	    public function run()
 	    {
 	        DB::table('posts')->delete();
 	        
-	        $lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pretium urna purus, et sagittis orci blandit cursus. Quisque at elit lorem. Praesent nec auctor enim, ac volutpat velit. Nullam euismod consequat fermentum. Proin accumsan justo felis, in eleifend erat tristique a. Curabitur in cursus lorem. Proin id mollis magna. Duis euismod auctor pellentesque. Morbi a gravida diam. In hac habitasse platea dictumst.
+	        $faker = $this->getFaker();
 
-Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesuada nulla massa eu urna. Cras ut adipiscing sapien. Donec ultricies metus lobortis, cursus urna sit amet, elementum est. Sed venenatis ante vel tortor placerat, eu.";
-
-			$parentpost = 30;
-			$replys 	= 70;
+			$parentpost = $this->parentpost;
+			$replys 	= $this->replys;
 
 			$usercount 	= User::count();
 			$catecount 	= Category::count();
@@ -99,12 +123,12 @@ Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesu
 			$date->modify("-5 days");
 
 			for($i = 0; $i < $parentpost; $i++){
-				$date->modify("+$totalposts minutes");
+				$date->modify("+$totalposts seconds");
 				$post = Post::create(array(
-				        	'content' 		=> 	$lorem,
+				        	'content' 		=> 	$faker->paragraph(mt_rand( 1, 25 )),
 				        	'title' 		=> 	'Title ' . $totalposts++,
 				        	'parentpost_id' => 	$i+1,
-				        	'category_id' 		=> 	mt_rand( 1, $catecount ),
+				        	'category_id' 	=> 	mt_rand( 1, $catecount ),
 				        	'user_id' 		=> 	mt_rand( 1, $usercount ),
 				        	'created_at'	=>	$date,
 				        	'updated_at'	=>	$date
@@ -114,13 +138,13 @@ Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesu
 			}
 
 			for($i = 0; $i < $replys; $i++){
-				$date->modify("+$totalposts minutes");
+				$date->modify("+$totalposts seconds");
 
 				$parentpost_id = mt_rand( 1, $parentpost );
 				$category_id = Post::where('id', '=', $parentpost_id)->first()->category_id;
 
 				$post = Post::create(array(
-				        	'content' 		=> 	$lorem,
+				        	'content' 		=> 	$faker->paragraph(mt_rand( 1, 25 )),
 				        	'title' 		=> 	'Title ' . $totalposts++,
 				        	'parentpost_id' => 	$parentpost_id,
 				        	'category_id' 	=> 	$category_id,
@@ -134,7 +158,7 @@ Etiam posuere, lacus sit amet lacinia viverra, leo massa hendrerit mi, ac malesu
 	    }
 	}
 
-	class LastTableSeeder extends Seeder {
+	class LastTableSeeder extends DatabaseSeeder {
 
 	    public function run()
 	    {

@@ -99,7 +99,7 @@ class ForumController extends BaseController {
 			
 			// if post did not fail
 			if( ! is_null($post->id)){
-				Auth::user()->increment('postcount');
+				$user->increment('postcount');
 
 				// creates last
 				$this->last->createLast($post, $cate->id);

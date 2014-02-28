@@ -5,7 +5,7 @@ use User;
 
 class EloquentUserModel implements UserModelInterface {
 	public function orderUser() {
-		return User::orderBy('username')->get();
+		return User::orderBy('username')->paginate(25);
 	}
 
 	public function createUser($credentials) {
