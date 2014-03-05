@@ -4,7 +4,7 @@ use interfaces\UserModelInterface;
 use User;
 
 class EloquentUserModel implements UserModelInterface {
-	public function orderUser() {
+	public function getUserOrdered() {
 		return User::orderBy('username')->paginate(25);
 	}
 

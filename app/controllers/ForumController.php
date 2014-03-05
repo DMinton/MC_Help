@@ -21,7 +21,7 @@ class ForumController extends BaseController {
 	public function getCategoryIndex(){
 
 		// gets all categories and orders by name
-		$categories = $this->category->getCategories();
+		$categories = $this->category->getAllCategories();
 
 		return View::make('forum.category.index', array('categories' => $categories));
 	}
@@ -66,7 +66,7 @@ class ForumController extends BaseController {
 
 			// gets all posts with a specific parent and
 			// in category
-			$posts = $this->post->getParentpostAndCategory($primarypost->category, $post_id);
+			$posts = $this->post->getCategoryPosts($primarypost->category, $post_id);
 
 			return View::make('forum.post.show', array('posts' => $posts));
 	}

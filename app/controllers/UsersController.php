@@ -13,7 +13,7 @@ class UsersController extends BaseController {
 	*/
 	public function getIndex()
 	{
-		$users = $this->user->orderUser();
+		$users = $this->user->getUserOrdered();
 		return View::make('users.index', array('users' => $users));
 	}
 

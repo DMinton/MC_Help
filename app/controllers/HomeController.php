@@ -15,7 +15,7 @@ class HomeController extends BaseController {
 	}
 
 	public function getSearch() {
-		$categories = $this->category->orderCategories();
+		$categories = $this->category->getCategoriesforSearch();
 		return View::make('home.search', array( 'categories' => $categories));
 	}
 

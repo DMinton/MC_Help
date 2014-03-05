@@ -8,7 +8,7 @@ class EloquentPostModel implements PostModelInterface {
         return Post::find($post_id);
     }
 
-    public function getParentpostAndCategory($category, $post_id) {
+    public function getCategoryPosts($category, $post_id) {
         return Post::with('user')
                         ->where('category_id', '=', $category)
                         ->orWhere('parentpost_id', '=', $post_id)

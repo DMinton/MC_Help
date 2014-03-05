@@ -4,7 +4,7 @@ use interfaces\CategoryModelInterface;
 use Category;
 
 class EloquentCategoryModel implements CategoryModelInterface {
-	public function getCategories() {
+	public function getAllCategories() {
     	return Category::with('post')
 					->orderBy('title')
 					->get();
@@ -19,7 +19,7 @@ class EloquentCategoryModel implements CategoryModelInterface {
 					->first();
     }
 
-    public function orderCategories() {
+    public function getCategoriesforSearch() {
         return Category::orderBy('title')
                     ->lists('title', 'id');
     }
