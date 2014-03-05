@@ -20,6 +20,7 @@ class EloquentPostModel implements PostModelInterface {
         return Post::where('category_id', '=', $cate_id)
                         ->where('content', 'like', "%$search%")
                         ->orderBy('created_at')
+                        ->groupBy('parentpost_id')
                         ->paginate(10);
     }
 

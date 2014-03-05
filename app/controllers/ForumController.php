@@ -58,6 +58,7 @@ class ForumController extends BaseController {
 							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
 			}
 
+			// category check
 			if($cate != $primarypost->category->title){
 				return Redirect::action('ForumController@getPost', 
 							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
@@ -88,16 +89,17 @@ class ForumController extends BaseController {
 					'content' 		=> $content
 				);
 
-			// gets category and parentpost
+			// gets category, parentpost and user
 			$cate = $this->category->findCategory($data['category_id']);
 			$parentpost = $this->post->findPost($data['parentpost_id']);
+			$user = Auth::user();
 
 			// creates post and returns results
-			$post = $this->post->createPost($data, $cate, Auth::user(), $parentpost);
+			$post = $this->post->createPost($data, $cate, $user, $parentpost);
 			
 			// if post did not fail
 			if( ! is_null($post->id)){
-				Auth::user()->increment('postcount');
+				$user->increment('postcount');
 
 				// creates last
 				$this->last->createLast($post, $cate->id);

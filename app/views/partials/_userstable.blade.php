@@ -14,3 +14,6 @@
 		</tr>
 	@endforeach
 </table>
+<div>
+	{{ $users->links() }}
+</div>
