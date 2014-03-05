@@ -5,7 +5,6 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*",
-		"codesleeve/asset-pipeline": "dev-master",
 		"fzaninotto/faker": "dev-master"
 	},
 	"require-dev": {
