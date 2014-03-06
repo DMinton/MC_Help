@@ -1,8 +1,6 @@
 /bootstrap/compiled.php
-/app/assets/stylesheets/bootstrap-theme.css
-/app/assets/stylesheets/bootstrap.css
-/app/assets/javascripts/jquery.js
 /app/config/local
+/app/config/localhost
 /vendor
 composer.phar
 composer.lock
