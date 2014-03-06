@@ -76,18 +76,10 @@ class ForumController extends BaseController {
 	*/
 	public function postPost(){
 
-		$content = Input::get('content');
+		$data = Input::all();
 
 		// auth user and checks if content field is valid
-		if ($content && Auth::check()){
-
-			// creates array containing data for post
-			$data = array(
-					'category_id' 	=> Input::get('category_id'),
-					'parentpost_id' => Input::get('parentpost_id'),
-					'title' 		=> Input::get('title'),
-					'content' 		=> $content
-				);
+		if ($data['content'] && Auth::check()){
 
 			// gets category, parentpost and user
 			$cate = $this->category->findCategory($data['category_id']);
@@ -96,7 +88,7 @@ class ForumController extends BaseController {
 
 			// creates post and returns results
 			$post = $this->post->createPost($data, $cate, $user, $parentpost);
-			
+
 			// if post did not fail
 			if( ! is_null($post->id)){
 				$user->increment('postcount');
@@ -104,8 +96,7 @@ class ForumController extends BaseController {
 				// creates last
 				$this->last->createLast($post, $cate->id);
 
-				return Redirect::action('ForumController@getPost', 
-							array('cate' => $post->category->title, 'id' => $post->parentpost_id));
+				return Redirect::back();
 			}
 		}
 		$message = 'Invalid post.';

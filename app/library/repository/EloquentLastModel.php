@@ -15,8 +15,9 @@ class EloquentLastModel implements LastModelInterface {
     }
 
     public function createLast($post, $cate_id) {
+        
         $last_update = $this->findLast($post->parentpost_id);
-
+        
         if(is_null($last_update)){
             $last_update = new Last();
             $last_update->category_id = $cate_id;

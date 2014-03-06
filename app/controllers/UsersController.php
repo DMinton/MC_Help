@@ -33,10 +33,7 @@ class UsersController extends BaseController {
 
 		if($validator->passes()){
 
-			$credentials = array(	
-									'username' => Input::get('username'),
-									'password' => Input::get('password')
-								);
+			$credentials = $this->user->getCredentials(Input::all());
 
 			// if success, return home
 			if($this->user->createUser($credentials)) {
@@ -59,9 +56,7 @@ class UsersController extends BaseController {
 	*/
 	public function postLoginUser(){
 
-		$credentials = array('username' => Input::get('username'),
-							 'password' => Input::get('password')
-							);
+		$credentials = $this->user->getCredentials(Input::all());
 
 		if(Auth::attempt($credentials, true)){
 			if(Auth::check()) { return Redirect::intended('/'); }

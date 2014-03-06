@@ -11,9 +11,16 @@ class EloquentUserModel implements UserModelInterface {
 	public function createUser($credentials) {
 		$newuser = new User();
 
-		$newuser->username = $credentials['username'];
-		$newuser->password = $credentials['password'];
+		$newuser->username = e($credentials['username']);
+		$newuser->password = e($credentials['password']);
 
 		 return $newuser->save();
+	}
+
+	public function getCredentials($credentials) {
+		return array(	
+					'username' => e($credentials['username']),
+					'password' => e($credentials['password'])
+				);
 	}
 }

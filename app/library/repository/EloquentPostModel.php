@@ -1,7 +1,7 @@
 <?php namespace repository;
 
 use interfaces\PostModelInterface;
-use Post;
+use Post, Category, User, Auth;
 
 class EloquentPostModel implements PostModelInterface {
 	public function findPost($post_id) {
@@ -26,27 +26,23 @@ class EloquentPostModel implements PostModelInterface {
 
     public function createPost($data, $cate, $user, $parentpost){
 
-        $post = new Post();
+        $post = new Post;
 
-        // associates data
         $post->content  = $data['content'];
         $post->title    = $data['title'];
 
         $post->user()->associate($user);
         $post->category()->associate($cate);
 
-        // if not null then the post is not a parent
         if( ! is_null($parentpost)){
             $post->parentPost()->associate($parentpost);
+        }
+        else{
+            $post->parentPost()->associate($post);
         }
 
         $post->save();
 
-        // if null then post is parent
-        if(is_null($parentpost)){
-            $post->parentPost()->associate($post);
-            $post->save();
-        }
         return $post;
     }
 }
