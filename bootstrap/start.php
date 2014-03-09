@@ -59,6 +59,34 @@ require $framework.'/Illuminate/Foundation/start.php';
 
 /*
 |--------------------------------------------------------------------------
+| Bindings
+|--------------------------------------------------------------------------
+|
+|
+*/
+
+App::bind(
+	'interfaces\CategoryModelInterface',
+	'repository\EloquentCategoryModel'
+);
+
+App::bind(
+	'interfaces\LastModelInterface',
+	'repository\EloquentLastModel'
+);
+
+App::bind(
+	'interfaces\PostModelInterface',
+	'repository\EloquentPostModel'
+);
+
+App::bind(
+	'interfaces\UserModelInterface',
+	'repository\EloquentUserModel'
+);
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |

@@ -24,26 +24,3 @@ Route::post(	'/signup',				'UsersController@postUser');
 Route::get(		'/login',				'UsersController@getLoginUser');
 Route::post(	'/login',				'UsersController@postLoginUser');
 Route::get(		'/logout',				'UsersController@getLogout');
-
-/*
-*	bindings
-*/
-App::bind(
-	'interfaces\CategoryModelInterface',
-	'repository\EloquentCategoryModel'
-);
-
-App::bind(
-	'interfaces\LastModelInterface',
-	'repository\EloquentLastModel'
-);
-
-App::bind(
-	'interfaces\PostModelInterface',
-	'repository\EloquentPostModel'
-);
-
-App::bind(
-	'interfaces\UserModelInterface',
-	'repository\EloquentUserModel'
-);
