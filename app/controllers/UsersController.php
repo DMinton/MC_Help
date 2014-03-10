@@ -1,6 +1,6 @@
 <?php
 
-use repository\EloquentUserModel as UserModel;
+use interfaces\UserModelInterface as UserModel;
 
 class UsersController extends BaseController {
 

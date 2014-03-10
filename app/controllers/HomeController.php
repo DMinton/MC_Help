@@ -1,7 +1,7 @@
 <?php
 
-use repository\EloquentCategoryModel as CategoryModel;
-use repository\EloquentPostModel as PostModel;
+use interfaces\CategoryModelInterface as CategoryModel;
+use interfaces\PostModelInterface as PostModel;
 
 class HomeController extends BaseController {
 

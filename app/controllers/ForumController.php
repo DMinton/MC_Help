@@ -1,8 +1,8 @@
 <?php
 
-use repository\EloquentCategoryModel as CategoryModel;
-use repository\EloquentLastModel as LastModel;
-use repository\EloquentPostModel as PostModel;
+use interfaces\CategoryModelInterface as CategoryModel;
+use interfaces\LastModelInterface as LastModel;
+use interfaces\PostModelInterface as PostModel;
 
 class ForumController extends BaseController {
 
