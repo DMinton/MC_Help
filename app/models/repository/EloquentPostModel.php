@@ -1,7 +1,7 @@
 <?php namespace repository;
 
 use interfaces\PostModelInterface;
-use Post, Category, User, Auth;
+use Post, Category, User;
 
 class EloquentPostModel implements PostModelInterface {
 	public function findPost($post_id) {

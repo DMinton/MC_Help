@@ -49,24 +49,27 @@ class ForumController extends BaseController {
 	*/
 	public function getPost($cate, $post_id){
 
-			// finds post and checks if it is the parent
-			// and then checks if the category is correct
-			// redirects if either is incorrect
+			// finds post and sets redirect
+			// array if needed
 			$primarypost = $this->post->findPost($post_id);
-			if($primarypost->parentpost_id != $primarypost->id){
-				return Redirect::action('ForumController@getPost', 
-							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
-			}
+			$redirect = array(
+				'cate' => $primarypost->category->title,
+				'id' => $primarypost->parentpost_id
+			);
 
 			// category check
 			if($cate != $primarypost->category->title){
-				return Redirect::action('ForumController@getPost', 
-							array('cate' => $primarypost->category->title, 'id' => $primarypost->parentpost_id));
+				return Redirect::action('ForumController@getPost', $redirect);
 			}
 
-			// gets all posts with a specific parent and
-			// in category
+			// gets all posts with a specific
+			// parent and in category
 			$posts = $this->post->getCategoryPosts($primarypost->category, $post_id);
+
+			// checks if the paginate page is valid
+			if(is_null($posts->first())){
+				return Redirect::action('ForumController@getPost', $redirect);
+			}
 
 			return View::make('forum.post.show', array('posts' => $posts));
 	}
