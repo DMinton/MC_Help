@@ -25,8 +25,11 @@ $app = new Illuminate\Foundation\Application;
 */
 
 $env = $app->detectEnvironment(array(
-    'localhost' => array('PC211561639531'),
-    'local' => array('David-HP')
+    'local' => array(
+        'David-HP',
+        'PC211561639531',
+        'dminton.local'
+    )
 ));
 
 /*

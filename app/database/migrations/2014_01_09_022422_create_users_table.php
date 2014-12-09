@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration {
 			$table->string('username', 50)->unique()->index();
 			$table->string('password', 64)->index();
 			$table->integer('postcount')->default(0);
+			$table->string('remember_token', 100)->nullable();
 			$table->timestamps();
 		});
 	}
