@@ -54,7 +54,7 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => $_ENV['DB_HOST'] ?: $_ENV['CLEARDB_DATABASE_URL'],
+			'host'      => $_ENV['CLEARDB_DATABASE_URL'],
 			'database'  => $_ENV['DB_NAME'],
 			'username'  => $_ENV['DB_USER'],
 			'password'  => $_ENV['DB_PASSWORD'],
