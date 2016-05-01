@@ -128,9 +128,9 @@ class DatabaseSeeder extends Seeder {
 				$post = Post::create(array(
 				        	'content' 		=> 	$faker->paragraph(mt_rand( 1, 25 )),
 				        	'title' 		=> 	'Title ' . $totalposts++,
-				        	'parentpost_id' => 	$i+1,
-				        	'category_id' 	=> 	array_rand($category, 1)->id,
-				        	'user_id' 		=> 	array_rand($users, 1)->id,
+				        	'parentpost_id' => 	(2 + ($i * 10)),
+				        	'category_id' 	=> 	$category{mt_rand( 1, $catecount ) - 1}->id,
+				        	'user_id' 		=> 	$users{mt_rand( 1, $usercount ) - 1}->id,
 				        	'created_at'	=>	$date,
 				        	'updated_at'	=>	$date
 	        			));
@@ -138,10 +138,12 @@ class DatabaseSeeder extends Seeder {
 				$post->save();
 			}
 
+			$parentPosts = Post::whereRaw('posts.parentpost_id = posts.id')->get();
+
 			for($i = 0; $i < $replys; $i++){
 				$date->modify("+$totalposts seconds");
 
-				$parentpost_id = mt_rand( 1, $parentpost );
+				$parentpost_id = $parentPosts{mt_rand( 1, $parentpost ) - 1}->id;
 				$category_id = Post::where('id', '=', $parentpost_id)->first()->category_id;
 
 				$post = Post::create(array(
@@ -149,7 +151,7 @@ class DatabaseSeeder extends Seeder {
 				        	'title' 		=> 	'Title ' . $totalposts++,
 				        	'parentpost_id' => 	$parentpost_id,
 				        	'category_id' 	=> 	$category_id,
-				        	'user_id' 		=> 	array_rand($users, 1)->id,
+				        	'user_id' 		=> 	$users{mt_rand( 1, $usercount ) - 1}->id,
 				        	'created_at'	=>	$date,
 				        	'updated_at'	=>	$date
 	        			));
@@ -168,7 +170,7 @@ class DatabaseSeeder extends Seeder {
 	        $posts = Post::all();
 
 	        for($i = 0; $i < count($posts); $i++){
-	        	$post = $posts->find($i+1);
+	        	$post = $posts->find((2 + ($i * 10)));
 		        if($post->id == $post->parentpost_id){
 		        	Last::create(array(
 		        			'parentpost_id' => $post->parentpost_id,
