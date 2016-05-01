@@ -54,10 +54,10 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => getenv('CLEARDB_DATABASE_URL'),
-			'database'  => getenv('DB_NAME'),
-			'username'  => getenv('DB_USER'),
-			'password'  => getenv('DB_PASSWORD'),
+			'host'      => env('CLEARDB_DATABASE_URL'),
+			'database'  => env('DB_NAME'),
+			'username'  => env('DB_USER'),
+			'password'  => env('DB_PASSWORD'),
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
