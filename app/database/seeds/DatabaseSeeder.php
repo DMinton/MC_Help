@@ -40,8 +40,8 @@ class DatabaseSeeder extends Seeder {
 	        DB::table('users')->delete();
 
 	        $pass = Hash::make('password');
-	        
-	        $users = array(	
+
+	        $users = array(
 	        				'David',
 	        				'Adam',
 	        				'Ben',
@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder {
 	    public function run()
 	    {
 	        DB::table('posts')->delete();
-	        
+
 	        $faker = $this->getFaker();
 
 			$parentpost = $this->parentpost;
@@ -118,6 +118,7 @@ class DatabaseSeeder extends Seeder {
 			$usercount 	= User::count();
 			$catecount 	= Category::count();
 			$category  	= Category::all();
+			$users		= User::all();
 			$totalposts = 1;
 			$date 		= new DateTime('NOW');
 			$date->modify("-5 days");
@@ -128,8 +129,8 @@ class DatabaseSeeder extends Seeder {
 				        	'content' 		=> 	$faker->paragraph(mt_rand( 1, 25 )),
 				        	'title' 		=> 	'Title ' . $totalposts++,
 				        	'parentpost_id' => 	$i+1,
-				        	'category_id' 	=> 	mt_rand( 1, $catecount ),
-				        	'user_id' 		=> 	mt_rand( 1, $usercount ),
+				        	'category_id' 	=> 	array_rand($category, 1)->id,
+				        	'user_id' 		=> 	array_rand($users, 1)->id,
 				        	'created_at'	=>	$date,
 				        	'updated_at'	=>	$date
 	        			));
@@ -148,7 +149,7 @@ class DatabaseSeeder extends Seeder {
 				        	'title' 		=> 	'Title ' . $totalposts++,
 				        	'parentpost_id' => 	$parentpost_id,
 				        	'category_id' 	=> 	$category_id,
-				        	'user_id' 		=> 	mt_rand( 1, $usercount ),
+				        	'user_id' 		=> 	array_rand($users, 1)->id,
 				        	'created_at'	=>	$date,
 				        	'updated_at'	=>	$date
 	        			));
@@ -163,7 +164,7 @@ class DatabaseSeeder extends Seeder {
 	    public function run()
 	    {
 	        DB::table('lasts')->delete();
-	        
+
 	        $posts = Post::all();
 
 	        for($i = 0; $i < count($posts); $i++){
